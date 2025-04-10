@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explorar Receitas Públicas</title>
+  <link rel="stylesheet" href="recipes.css">
+</head>
+<body>
+  <header class="header">
+    <h1 class="logo">Barone</h1>
+    <button class="logout-button" onclick="voltarParaMinhasReceitas()">Minhas Receitas</button>
+  </header>
+
+  <div class="grid" id="publicRecipeGrid">
+    <!-- Cards de receitas públicas serão injetados aqui -->
+  </div>
+
+  <!-- Modal de visualização (somente leitura) -->
+  <div class="modal-overlay" id="modalViewOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="viewNome">Nome da Receita</h2>
+        <p><strong>Por:</strong> <span id="autorReceita">Desconhecido</span></p>
+        <button class="close-btn" onclick="fecharModalVisualizacao()" aria-label="Fechar">
+          <img src="/assets/exit.svg" alt="Fechar">
+        </button>
+      </div>
+      <p><strong>Tipo:</strong> <span id="viewTipo"></span></p>
+      <p><strong>Descrição:</strong></p>
+      <p id="viewDescricao"></p>
+      <p><strong>Criada em:</strong> <span id="viewData"></span></p>
+      <hr style="margin: 20px 0; border-color: #7A7A7A;" />
+      <h3>Comentários</h3>
+      <div id="comentariosContainer"></div>
+      <div style="margin-top: 1rem;">
+        <textarea id="novoComentario" placeholder="Escreva um comentário..." rows="3" style="width: 100%; background-color: #232323; color: #F7F7F7; border: 1px solid #575757; border-radius: 8px; padding: 0.75rem;"></textarea>
+        <button onclick="enviarComentario()" style="margin-top: 0.5rem;" class="save-btn">Comentar</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="explore.js"></script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Barone - Receitas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="recipes.css">
+</head>
+<body>
+  <header class="header">
+    <h1 class="logo">Barone</h1>
+    <div class="header-buttons">
+      <button class="explore-button" onclick="irParaExplorar()">Explorar</button>
+      <button class="logout-button" onclick="logout()">Sair</button>
+    </div>
+  </header>
+   
+
+  <div class="grid" id="recipeGrid">
+    <div class="card create-card" onclick="abrirModal()">
+      <div>
+        <i>＋</i>
+        <span>Clique aqui para criar<br />uma nova receita</span>
+      </div>
+    </div>
+    <!-- Cards de receitas serão injetados aqui -->
+  </div>
+
+  <!-- Modal de criação -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Nova Receita</h2>
+      <button class="close-btn" onclick="fecharModal()" aria-label="Fechar">
+        <img src="/assets/exit.svg" alt="Fechar">
+      </button>
+    </div>
+    <select id="tipoReceita">
+      <option value="Doce">Doce</option>
+      <option value="Salgado">Salgado</option>
+      <option value="Vegano">Vegano</option>
+      <option value="Vegetariano">Vegetariano</option>
+      <option value="Almoço">Almoço</option>
+      <option value="Sobremesa">Sobremesa</option>
+      <option value="Café da manhã">Café da manhã</option>
+    </select>
+    <input type="text" id="nomeReceita" placeholder="Nome da Receita">
+    <textarea id="modoPreparo" placeholder="Descrição da Receita" rows="4"></textarea>
+    <div class="checkbox-container">
+      <input type="checkbox" id="publicaReceita" />
+      <label for="publicaReceita">Tornar receita pública</label>
+    </div>    
+        
+    <button class="save-btn" onclick="criarReceita()">Salvar Receita</button>
+  </div>
+</div>
+
+
+<!-- Modal de visualização/edição -->
+<div class="modal-overlay" id="modalViewOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Editar Receita</h2>
+      <button class="close-btn" onclick="fecharModalVisualizacao()" aria-label="Fechar">
+        <img src="/assets/exit.svg" alt="Fechar">
+      </button>
+    </div>
+
+    <input type="text" id="editNome" placeholder="Nome da Receita">
+    <select id="editTipo">
+      <option value="Doce">Doce</option>
+      <option value="Salgado">Salgado</option>
+      <option value="Vegano">Vegano</option>
+      <option value="Vegetariano">Vegetariano</option>
+      <option value="Almoço">Almoço</option>
+      <option value="Sobremesa">Sobremesa</option>
+      <option value="Café da manhã">Café da manhã</option>
+    </select>
+    <textarea id="editDescricao" placeholder="Descrição da Receita" rows="4"></textarea>
+    <div class="checkbox-container">
+      <input type="checkbox" id="editPublicaReceita" />
+      <label for="editPublicaReceita">Tornar receita pública</label>
+    </div>
+    
+    
+    
+
+    <div style="display: flex; justify-content: space-between; gap: 10px; margin-top: 1rem;">
+      <button class="save-btn" onclick="salvarEdicao()">Salvar alterações</button>
+      <button class="logout-button" onclick="deletarReceita()">Excluir</button>
+    </div>
+  </div>
+</div>
+
+  
+
+<!-- Modal de visualização -->
+ <!-- Alinhar o botao de fechar em relacao ao nome da receita -->
+<div class="modal-overlay" id="modalViewOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="viewNome">Nome da Receita</h2>
+      <button class="close-btn" onclick="fecharModalVisualizacao()" aria-label="Fechar">
+        ×
+      </button>
+    </div>
+    <p><strong>Tipo:</strong> <span id="viewTipo"></span></p>
+    <p><strong>Descrição:</strong></p>
+    <p id="viewDescricao"></p>
+    <p><strong>Criada em:</strong> <span id="viewData"></span></p>
+  </div>
+</div>
+
+
+<div id="toast-container"></div>
+
+  
+  <script src="recipes.js"></script>
+  
+</body>
+</html>
