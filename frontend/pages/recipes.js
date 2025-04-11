@@ -7,7 +7,6 @@ function logout() {
     window.location.href = "/pages/explore.html";
   }
   
-
   function showToast(mensagem) {
     const toastContainer = document.getElementById("toast-container");
     const toast = document.createElement("div");
@@ -25,8 +24,6 @@ function logout() {
     }, 3000);
   }
   
-  
-
   function abrirModal() {
     document.getElementById("modalOverlay").style.display = "flex";
   }
@@ -44,23 +41,18 @@ function logout() {
     document.getElementById("modalViewOverlay").style.display = "flex";
   }
   
-  
   function fecharModalVisualizacao() {
     document.getElementById("modalViewOverlay").style.display = "none";
     receitaSelecionadaId = null;
   }
   
-  
-  
   function salvarReceita() {
     const userId = localStorage.getItem("userId");
-  
     const recipeName = document.getElementById("nomeReceita").value;
     const recipeType = document.getElementById("tipoReceita").value;
     const description = document.getElementById("modoPreparo").value;
     const isPublic = document.getElementById("publicaReceita").checked;
 
-  
     const novaReceita = {
       recipeName,
       recipeType,
@@ -86,8 +78,6 @@ function logout() {
     });
   }
   
-
-
   function getUserId() {
     const userId = localStorage.getItem("userId");
     if (!userId) {
@@ -119,7 +109,6 @@ function logout() {
       });
   }
   
-
   function carregarReceitas() {
     const userId = localStorage.getItem("userId");
     fetch(`http://localhost:8080/recipes/user/${userId}`)
@@ -189,6 +178,4 @@ function logout() {
       .catch(err => alert("Erro: " + err.message));
   }
   
-  
-
   window.onload = carregarReceitas;

@@ -1,6 +1,21 @@
-/** Atualizado: suporte a comentários em receitas públicas na página explore **/
-
 let receitaSelecionadaId = null;
+
+function showToast(mensagem) {
+  const toastContainer = document.getElementById("toast-container");
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.textContent = mensagem;
+  toastContainer.appendChild(toast);
+
+  // Espera o tempo da animação + um pouco antes de remover
+  setTimeout(() => {
+    toast.style.opacity = "0"; // força sumir se não aplicar keyframe 100%
+  }, 2500);
+
+  setTimeout(() => {
+    toast.remove();
+  }, 3000);
+}
 
 function carregarReceitasPublicas() {
   fetch("http://localhost:8080/recipes/public")
@@ -12,14 +27,30 @@ function carregarReceitasPublicas() {
       data.forEach(recipe => {
         const card = document.createElement("div");
         card.className = "card";
+      
+        // Preencher temporariamente enquanto a média é buscada
         card.innerHTML = `
           <h3>${recipe.recipeName}</h3>
           <span>${recipe.recipeType}</span>
           <p>${recipe.description}</p>
+          <div class="rating" id="rating-${recipe.id}">⭐ Carregando...</div>
           <span style="font-size: 12px; float: right;">${new Date(recipe.createdAt).toLocaleDateString()}</span>
         `;
+      
         card.onclick = () => abrirVisualizacaoReceita(recipe);
         grid.appendChild(card);
+      
+        // Buscar a média da avaliação
+        fetch(`http://localhost:8080/ratings/average/${recipe.id}`)
+          .then(res => res.json())
+          .then(nota => {
+            const ratingDiv = document.getElementById(`rating-${recipe.id}`);
+            ratingDiv.textContent = `⭐ ${nota.toFixed(1)}`;
+          })
+          .catch(() => {
+            const ratingDiv = document.getElementById(`rating-${recipe.id}`);
+            ratingDiv.textContent = "⭐ Sem nota";
+          });
       });
     });
 }
@@ -32,6 +63,7 @@ function abrirVisualizacaoReceita(recipe) {
   document.getElementById("viewData").textContent = new Date(recipe.createdAt).toLocaleDateString();
   document.getElementById("autorReceita").textContent = recipe.user?.username || recipe.user?.email || "Autor desconhecido";
   document.getElementById("modalViewOverlay").style.display = "flex";
+  renderizarEstrelas(recipe.userScore || 0);
   carregarComentarios(recipe.id);
 }
 
@@ -83,5 +115,66 @@ function enviarComentario(recipe) {
     })
     .catch(err => alert("Erro: " + err.message));
 }
+
+function renderizarEstrelas(scoreAtual = 0) {
+  const container = document.getElementById("estrelas");
+  container.innerHTML = "";
+
+  for (let i = 1; i <= 5; i++) {
+    const estrela = document.createElement("span");
+    estrela.textContent = "★";
+    estrela.className = "estrela";
+    estrela.dataset.index = i;
+
+    // Estado inicial
+    estrela.style.color = i <= scoreAtual ? "#FFD700" : "#555";
+
+    // Hover visual
+    estrela.addEventListener("mouseenter", () => {
+      const estrelas = container.querySelectorAll(".estrela");
+      estrelas.forEach((el, idx) => {
+        el.style.color = idx < i ? "#FFD700" : "#555";
+      });
+    });
+
+    // Reset após sair do hover
+    estrela.addEventListener("mouseleave", () => {
+      const estrelas = container.querySelectorAll(".estrela");
+      estrelas.forEach((el, idx) => {
+        el.style.color = idx < scoreAtual ? "#FFD700" : "#555";
+      });
+    });
+
+    // Enviar avaliação ao clicar
+    estrela.addEventListener("click", () => enviarAvaliacao(receitaSelecionadaId, i));
+
+    container.appendChild(estrela);
+  }
+}
+
+
+
+function enviarAvaliacao(recipeId, score) {
+  const userId = localStorage.getItem("userId");
+  if (!userId) return alert("Você precisa estar logado para avaliar.");
+
+  const url = `http://localhost:8080/ratings?userId=${userId}&recipeId=${recipeId}&score=${score}`;
+
+  fetch(url, {
+    method: "POST"
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Erro ao enviar avaliação");
+      return res.json();
+    })
+    .then(() => {
+      showToast("Avaliação enviada com sucesso!");
+      carregarReceitasPublicas(); // atualiza média no card
+    })
+    .catch(err => {
+      alert("Erro ao avaliar: " + err.message);
+    });
+}
+
 
 window.onload = carregarReceitasPublicas;

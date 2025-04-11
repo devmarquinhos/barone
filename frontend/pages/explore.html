@@ -29,6 +29,12 @@
       <p><strong>Tipo:</strong> <span id="viewTipo"></span></p>
       <p><strong>Descrição:</strong></p>
       <p id="viewDescricao"></p>
+      <div class="rating-area">
+        <label for="avaliacao">Avalie esta receita:</label>
+        <div id="estrelas" class="estrelas">
+          <!-- Estrelas vão ser inseridas pelo JS -->
+        </div>
+      </div>
       <p><strong>Criada em:</strong> <span id="viewData"></span></p>
       <hr style="margin: 20px 0; border-color: #7A7A7A;" />
       <h3>Comentários</h3>
@@ -37,9 +43,10 @@
         <textarea id="novoComentario" placeholder="Escreva um comentário..." rows="3" style="width: 100%; background-color: #232323; color: #F7F7F7; border: 1px solid #575757; border-radius: 8px; padding: 0.75rem;"></textarea>
         <button onclick="enviarComentario()" style="margin-top: 0.5rem;" class="save-btn">Comentar</button>
       </div>
-
     </div>
   </div>
+
+  <div id="toast-container"></div>
 
   <script src="explore.js"></script>
 </body>
