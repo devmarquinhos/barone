@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/ratings")
 public class RatingController {
-    // Fazer o front, so isso e o projeto ta file
     @Autowired
     private RatingService ratingService;
 

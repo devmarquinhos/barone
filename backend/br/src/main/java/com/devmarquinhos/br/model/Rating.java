@@ -11,7 +11,7 @@ public class Rating {
     private Integer id;
 
     @Column(nullable = false)
-    private int score; // De 1 a 5, por exemplo
+    private int score;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipe_id", nullable = false)

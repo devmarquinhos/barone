@@ -10,6 +10,5 @@ import java.util.Optional;
 
 public interface RatingRepository extends JpaRepository<Rating, Integer> {
     List<Rating> findByRecipe(Recipe recipe);
-
     Optional<Rating> findByUserAndRecipe(User user, Recipe recipe);
 }
