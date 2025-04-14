@@ -6,17 +6,16 @@ function logout() {
   function irParaExplorar() {
     window.location.href = "/pages/explore.html";
   }
-  
+
   function showToast(mensagem) {
     const toastContainer = document.getElementById("toast-container");
     const toast = document.createElement("div");
     toast.className = "toast";
     toast.textContent = mensagem;
     toastContainer.appendChild(toast);
-  
-    // Espera o tempo da animação + um pouco antes de remover
+
     setTimeout(() => {
-      toast.style.opacity = "0"; // força sumir se não aplicar keyframe 100%
+      toast.style.opacity = "0";
     }, 2500);
   
     setTimeout(() => {
@@ -130,7 +129,7 @@ function logout() {
             <h3>${recipe.recipeName}</h3>
             <span>${recipe.recipeType}</span>
             <p>${recipe.description}</p>
-            <span style="font-size: 12px; float: right;">${new Date(recipe.createdAt).toLocaleDateString()}</span>
+            <span style="font-size: 12px; float: right;">${recipe.createdAt}</span>
           `;
           card.onclick = () => abrirModalVisualizacao(recipe);
           grid.appendChild(card);
@@ -176,6 +175,11 @@ function logout() {
         showToast("Receita excluída com sucesso!");
       })
       .catch(err => alert("Erro: " + err.message));
+  }
+
+  function ajustarAlturaTextarea(textarea) {
+    textarea.style.height = "auto";
+    textarea.style.height = textarea.scrollHeight + "px";
   }
   
   window.onload = carregarReceitas;

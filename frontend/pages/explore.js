@@ -7,9 +7,8 @@ function showToast(mensagem) {
   toast.textContent = mensagem;
   toastContainer.appendChild(toast);
 
-  // Espera o tempo da animação + um pouco antes de remover
   setTimeout(() => {
-    toast.style.opacity = "0"; // força sumir se não aplicar keyframe 100%
+    toast.style.opacity = "0";
   }, 2500);
 
   setTimeout(() => {
@@ -28,19 +27,17 @@ function carregarReceitasPublicas() {
         const card = document.createElement("div");
         card.className = "card";
       
-        // Preencher temporariamente enquanto a média é buscada
         card.innerHTML = `
           <h3>${recipe.recipeName}</h3>
           <span>${recipe.recipeType}</span>
           <p>${recipe.description}</p>
           <div class="rating" id="rating-${recipe.id}">⭐ Carregando...</div>
-          <span style="font-size: 12px; float: right;">${new Date(recipe.createdAt).toLocaleDateString()}</span>
+          <span style="font-size: 12px; float: right;">${recipe.createdAt}</span>
         `;
       
         card.onclick = () => abrirVisualizacaoReceita(recipe);
         grid.appendChild(card);
       
-        // Buscar a média da avaliação
         fetch(`http://localhost:8080/ratings/average/${recipe.id}`)
           .then(res => res.json())
           .then(nota => {
@@ -60,7 +57,7 @@ function abrirVisualizacaoReceita(recipe) {
   document.getElementById("viewNome").textContent = recipe.recipeName;
   document.getElementById("viewTipo").textContent = recipe.recipeType;
   document.getElementById("viewDescricao").textContent = recipe.description;
-  document.getElementById("viewData").textContent = new Date(recipe.createdAt).toLocaleDateString();
+  document.getElementById("viewData").textContent = recipe.createdAt;
   document.getElementById("autorReceita").textContent = recipe.user?.username || recipe.user?.email || "Autor desconhecido";
   document.getElementById("modalViewOverlay").style.display = "flex";
   renderizarEstrelas(recipe.userScore || 0);
@@ -126,10 +123,8 @@ function renderizarEstrelas(scoreAtual = 0) {
     estrela.className = "estrela";
     estrela.dataset.index = i;
 
-    // Estado inicial
     estrela.style.color = i <= scoreAtual ? "#FFD700" : "#555";
 
-    // Hover visual
     estrela.addEventListener("mouseenter", () => {
       const estrelas = container.querySelectorAll(".estrela");
       estrelas.forEach((el, idx) => {
@@ -137,7 +132,6 @@ function renderizarEstrelas(scoreAtual = 0) {
       });
     });
 
-    // Reset após sair do hover
     estrela.addEventListener("mouseleave", () => {
       const estrelas = container.querySelectorAll(".estrela");
       estrelas.forEach((el, idx) => {
@@ -145,14 +139,11 @@ function renderizarEstrelas(scoreAtual = 0) {
       });
     });
 
-    // Enviar avaliação ao clicar
     estrela.addEventListener("click", () => enviarAvaliacao(receitaSelecionadaId, i));
 
     container.appendChild(estrela);
   }
 }
-
-
 
 function enviarAvaliacao(recipeId, score) {
   const userId = localStorage.getItem("userId");
@@ -169,12 +160,20 @@ function enviarAvaliacao(recipeId, score) {
     })
     .then(() => {
       showToast("Avaliação enviada com sucesso!");
-      carregarReceitasPublicas(); // atualiza média no card
+      carregarReceitasPublicas();
     })
     .catch(err => {
       alert("Erro ao avaliar: " + err.message);
     });
 }
+
+document.querySelectorAll("textarea").forEach(textarea => {
+  textarea.addEventListener("input", () => {
+    textarea.style.height = "auto";
+    textarea.style.height = textarea.scrollHeight + "px";
+  });
+});
+
 
 
 window.onload = carregarReceitasPublicas;
