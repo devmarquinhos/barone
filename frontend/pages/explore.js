@@ -60,9 +60,28 @@ function abrirVisualizacaoReceita(recipe) {
   document.getElementById("viewData").textContent = recipe.createdAt;
   document.getElementById("autorReceita").textContent = recipe.user?.username || recipe.user?.email || "Autor desconhecido";
   document.getElementById("modalViewOverlay").style.display = "flex";
-  renderizarEstrelas(recipe.userScore || 0);
+
+  // Busca a avaliação do usuário logado pra essa receita
+  const userId = localStorage.getItem("userId");
+  if (!userId) {
+    renderizarEstrelas(0); // se não estiver logado, exibe zerado
+  } else {
+    fetch(`http://localhost:8080/ratings/user/${userId}/recipe/${recipe.id}`)
+      .then(res => {
+        if (!res.ok) throw new Error("Nenhuma avaliação");
+        return res.json();
+      })
+      .then(userScore => {
+        renderizarEstrelas(userScore);
+      })
+      .catch(() => {
+        renderizarEstrelas(0);
+      });
+  }
+
   carregarComentarios(recipe.id);
 }
+
 
 function fecharModalVisualizacao() {
   document.getElementById("modalViewOverlay").style.display = "none";
@@ -187,12 +206,14 @@ function enviarAvaliacao(recipeId, score) {
     })
     .then(() => {
       showToast("Avaliação enviada com sucesso!");
+      renderizarEstrelas(score); // ⭐️ mantém as estrelas preenchidas
       carregarReceitasPublicas();
     })
     .catch(err => {
       alert("Erro ao avaliar: " + err.message);
     });
 }
+
 
 document.querySelectorAll("textarea").forEach(textarea => {
   textarea.addEventListener("input", () => {
