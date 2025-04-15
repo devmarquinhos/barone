@@ -4,14 +4,12 @@ import com.devmarquinhos.br.dto.LoginRequest;
 import com.devmarquinhos.br.model.User;
 import com.devmarquinhos.br.service.UserService;
 import com.devmarquinhos.br.repository.UserRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController

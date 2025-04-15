@@ -75,6 +75,7 @@ function voltarParaMinhasReceitas() {
 }
 
 function carregarComentarios(recipeId) {
+  const userIdLogado = parseInt(localStorage.getItem("userId"));
   fetch(`http://localhost:8080/comments/recipe/${recipeId}`)
     .then(res => res.json())
     .then(comments => {
@@ -85,12 +86,38 @@ function carregarComentarios(recipeId) {
         return;
       }
       comments.forEach(comment => {
-        const p = document.createElement("p");
-        p.innerHTML = `<strong>${comment.user?.username || comment.user?.email || "Anônimo"}:</strong> ${comment.text}`;
-        container.appendChild(p);
+        const div = document.createElement("div");
+        div.className = "comentario";
+        div.style.display = "flex";
+        div.style.justifyContent = "space-between";
+        div.style.alignItems = "center";
+        div.style.marginBottom = "0.5rem";
+
+        const texto = document.createElement("p");
+        texto.innerHTML = `<strong>${comment.user?.username || comment.user?.email || "Anônimo"}:</strong> ${comment.text}`;
+
+        div.appendChild(texto);
+
+        if (comment.user?.id === userIdLogado) {
+          const btnExcluir = document.createElement("button");
+          btnExcluir.textContent = "🗑️";
+          btnExcluir.className = "delete-btn";
+          btnExcluir.style.marginLeft = "10px";
+          btnExcluir.style.background = "transparent";
+          btnExcluir.style.border = "none";
+          btnExcluir.style.cursor = "pointer";
+          btnExcluir.title = "Excluir comentário";
+
+          btnExcluir.onclick = () => deletarComentario(comment.id);
+
+          div.appendChild(btnExcluir);
+        }
+
+        container.appendChild(div);
       });
     });
 }
+
 
 function enviarComentario(recipe) {
   const userId = localStorage.getItem("userId");
@@ -173,6 +200,21 @@ document.querySelectorAll("textarea").forEach(textarea => {
     textarea.style.height = textarea.scrollHeight + "px";
   });
 });
+
+function deletarComentario(commentId) {
+  if (!confirm("Tem certeza que deseja excluir este comentário?")) return;
+
+  fetch(`http://localhost:8080/comments/${commentId}`, {
+    method: "DELETE"
+  })
+    .then(res => {
+      if (!res.ok) throw new Error("Erro ao excluir comentário.");
+      showToast("Comentário excluído com sucesso!");
+      carregarComentarios(receitaSelecionadaId);
+    })
+    .catch(err => alert("Erro: " + err.message));
+}
+
 
 
 

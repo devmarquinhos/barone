@@ -396,6 +396,68 @@ header {
   transition: color 0.2s ease;
 }
 
+/* Botão de deletar comentário */
+.delete-btn {
+  background-color: transparent;
+  border: none;
+  color: #f44336; /* vermelho claro */
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+  padding: 4px;
+  margin-left: 8px;
+}
+
+.delete-btn:hover {
+  color: #ff6659; /* vermelho mais claro ao hover */
+  transform: scale(1.2); /* animação de zoom */
+}
+
+/* Container do comentário */
+.comentario {
+  background-color: #1e1e1e;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #333;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  color: #f7f7f7;
+}
+
+.comentario p {
+  margin: 0;
+  flex: 1;
+  word-break: break-word;
+}
+
+/* Estiliza o select com um ícone de chevron para baixo */
+select {
+  appearance: none;           /* Remove estilo padrão */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #232323;
+  color: #F7F7F7;
+  padding: 0.75rem;
+  border: 1px solid #575757;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 100%;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23F7F7F7' stroke-width='2' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 12px;
+  cursor: pointer;
+}
+
+/* Remove a seta padrão no Firefox */
+select::-ms-expand {
+  display: none;
+}
+
+
 
 
 @keyframes fadein {
